@@ -1,0 +1,43 @@
+version: '3.5'
+
+services:
+
+  developer-golang:
+    image: ttruong15/ubuntu-golang
+    ports:
+      - 50051:50051
+      - 8888:8888
+    networks:
+      - development
+    links:
+      - developer-database:devdb
+    volumes:
+      - /home/tinh/docker-env/examples/golang:/golang/examples
+      - /home/tinh/docker-env/examples/php:/php/code
+      - /home/tinh/docker-env/examples/node:/node
+    environment:
+      MODE: master
+    restart: unless-stopped
+    container_name: developer-golang
+  developer-database:
+    image: postgres:9.6
+    user: postgres
+    ports:
+      - 5432:5432
+    networks:
+      - development
+    volumes:
+      - /home/tinh/docker-env/database:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
+    restart: unless-stopped
+    container_name: postgres_db
+networks:
+  development:
+    name: localdev
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.16.0.1/16

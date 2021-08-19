@@ -1,0 +1,11 @@
+{
+    "require": {
+        "grpc/grpc": "^1.38"
+    },
+    "autoload": {
+        "psr-4": {
+        "GPBMetadata\\": "GPBMetadata",
+        "Proto\\": "Proto/"
+    }
+  }
+}
