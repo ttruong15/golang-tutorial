@@ -3,7 +3,7 @@ version: '3.5'
 services:
 
   developer-golang:
-    image: ttruong15/protobuf-grpc-tutorial
+    image: ttruong15/protobuf-grpc-tutorial:1.0.1
     ports:
       - 50051:50051
       - 8888:8888
@@ -27,7 +27,7 @@ services:
     networks:
       - development
     volumes:
-      - /home/tinh/docker-env/database:/var/lib/postgresql/data
+      - ~/docker-env/database:/var/lib/postgresql/data
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: admin
