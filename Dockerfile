@@ -36,8 +36,8 @@ RUN phpenmod protobuf
 #RUN tar -xzf apache-pulsar-2.8.0-bin.tar.gz
 #ENV PATH "$PATH:/apache-pulsar-2.8.0/bin"
 
-RUN wget https://golang.org/dl/go1.16.7.linux-amd64.tar.gz
-RUN rm -rf /usr/local/go && tar -C /usr/local -xzf go1.16.7.linux-amd64.tar.gz
+RUN wget https://golang.org/dl/go1.17.linux-amd64.tar.gz
+RUN rm -rf /usr/local/go && tar -C /usr/local -xzf go1.17.linux-amd64.tar.gz
 
 # build grpc_php_plugin so we can generate protobuf
 RUN bash -c 'mkdir -pv /php/{code,plugins}'
@@ -53,7 +53,8 @@ COPY grpc-build.sh /php
 COPY examples/php /php/code
 RUN cd /php/code && composer install
 
-RUN mkdir -p /golang/example.com
+RUN bash -c 'mkdir -p /golang/{example.com,bin}'
+#RUN cp /usr/local/go/bin/* /golang/bin/
 WORKDIR golang
 ENV GOPATH "/golang"
 ENV GOBIN "/usr/local/go/bin"
@@ -63,12 +64,14 @@ COPY examples/golang/example.com /golang/example.com
 RUN cd example.com && go mod tidy && go build server/main.go
 #RUN cd /golang/example.com && go mod init example.com && go mod tidy
 
-# install golang protobuf compiler and grpc
-RUN go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.26
+# install golang protobuf compiler and grpc, the reason i am using this instead of the one from google
+# is the generation of the grpc can be build into a single file
+#RUN go install github.com/golang/protobuf/protoc-gen-go@latest
+RUN go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.27.1
 RUN go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.1
 
 RUN git clone -b v1.35.0 https://github.com/grpc/grpc-go
 
-CMD ["/golang/example.com/main"]
-#CMD ["tail", "-f", "/var/log/dpkg.log"]
+#CMD ["/golang/example.com/main"]
+CMD ["tail", "-f", "/var/log/dpkg.log"]
 #CMD ["/usr/local/go/bin/go", "run", "/golang/grpc-go/examples/helloworld/greeter_server/main.go"]

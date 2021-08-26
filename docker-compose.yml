@@ -3,7 +3,7 @@ version: '3.5'
 services:
 
   developer-golang:
-    image: ttruong15/protobuf-grpc-tutorial:1.0.1
+    image: ttruong15/protobuf-grpc-tutorial:1.0.5
     ports:
       - 50051:50051
       - 8888:8888
