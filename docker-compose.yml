@@ -3,7 +3,7 @@ version: '3.5'
 services:
 
   developer-golang:
-    image: ttruong15/ubuntu-golang
+    image: ttruong15/protobuf-grpc-tutorial
     ports:
       - 50051:50051
       - 8888:8888
@@ -11,10 +11,10 @@ services:
       - development
     links:
       - developer-database:devdb
-    volumes:
-      - /home/tinh/docker-env/examples/golang:/golang/examples
-      - /home/tinh/docker-env/examples/php:/php/code
-      - /home/tinh/docker-env/examples/node:/node
+    #volumes:
+        #- /home/tinh/docker-env/examples/golang:/golang/examples
+        #- /home/tinh/docker-env/examples/php:/php/code
+        #- /home/tinh/docker-env/examples/node:/node
     environment:
       MODE: master
     restart: unless-stopped

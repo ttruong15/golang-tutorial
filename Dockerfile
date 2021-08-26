@@ -46,13 +46,22 @@ RUN cd /php/grpc && git submodule update --init && mkdir -p cmake/build && cd cm
 RUN cp /php/grpc/cmake/build/grpc_php_plugin /php/plugins
 
 RUN mkdir /node
-COPY grpc-build.sh /php
+COPY examples/node/* /node/
+RUN cd /node && npm i
 
-RUN mkdir golang
+COPY grpc-build.sh /php
+COPY examples/php /php/code
+RUN cd /php/code && composer install
+
+RUN mkdir -p /golang/example.com
 WORKDIR golang
 ENV GOPATH "/golang"
 ENV GOBIN "/usr/local/go/bin"
 ENV PATH "$PATH:/usr/local/go/bin:/golang/bin"
+
+COPY examples/golang/example.com /golang/example.com
+RUN cd example.com && go mod tidy && go build server/main.go
+#RUN cd /golang/example.com && go mod init example.com && go mod tidy
 
 # install golang protobuf compiler and grpc
 RUN go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.26
@@ -60,7 +69,6 @@ RUN go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.1
 
 RUN git clone -b v1.35.0 https://github.com/grpc/grpc-go
 
-
-
-CMD ["tail", "-f", "/var/log/dpkg.log"]
+CMD ["/golang/example.com/main"]
+#CMD ["tail", "-f", "/var/log/dpkg.log"]
 #CMD ["/usr/local/go/bin/go", "run", "/golang/grpc-go/examples/helloworld/greeter_server/main.go"]
