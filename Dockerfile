@@ -84,6 +84,9 @@ RUN bash -c 'mkdir -p /var/lib/cassandra/{data,commitlog,saved_caches,cdc_raw}'
 RUN chown -Rf cassandra.cassandra /var/lib/cassandra /home/cassandra/cassandra
 COPY cassandra.yaml /home/cassandra/cassandra/conf/
 
+COPY start-cassandra.sh /usr/local/bin
+
 #CMD ["/golang/example.com/main"]
-CMD ["tail", "-f", "/var/log/dpkg.log"]
+CMD ["/usr/local/bin/start-cassandra.sh"]
+#CMD ["tail", "-f", "/var/log/dpkg.log"]
 #CMD ["/usr/local/go/bin/go", "run", "/golang/grpc-go/examples/helloworld/greeter_server/main.go"]
