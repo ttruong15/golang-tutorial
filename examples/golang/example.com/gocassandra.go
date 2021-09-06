@@ -9,7 +9,7 @@ import (
 
 func main() {
     cluster := gocql.NewCluster("localhost")
-    cluster.Keyspace = "tutorialspoint"
+    cluster.Keyspace = "example"
     cluster.Consistency = gocql.Quorum
     session, _ := cluster.CreateSession()
     defer session.Close()
