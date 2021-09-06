@@ -72,6 +72,18 @@ RUN go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.1
 
 RUN git clone -b v1.35.0 https://github.com/grpc/grpc-go
 
+RUN adduser --disabled-password --gecos '' cassandra
+RUN mkdir /home/cassandra/cassandra
+RUN wget https://dlcdn.apache.org/cassandra/4.0.0/apache-cassandra-4.0.0-bin.tar.gz
+RUN tar zxf apache-cassandra-4.0.0-bin.tar.gz
+RUN mv apache-cassandra-4.0.0/* /home/cassandra/cassandra
+RUN rm -Rf apache-cassandra-4.0.0 apache-cassandra-4.0.0-bin.tar.gz
+ENV CASSANDRA_HOME "/home/cassandra/cassandra"
+ENV PATH "$PATH:$CASSANDRA_HOME/bin"
+RUN bash -c 'mkdir -p /var/lib/cassandra/{data,commitlog,saved_caches,cdc_raw}'
+RUN chown -Rf cassandra.cassandra /var/lib/cassandra /home/cassandra/cassandra
+COPY cassandra.yaml /home/cassandra/cassandra/conf/
+
 #CMD ["/golang/example.com/main"]
 CMD ["tail", "-f", "/var/log/dpkg.log"]
 #CMD ["/usr/local/go/bin/go", "run", "/golang/grpc-go/examples/helloworld/greeter_server/main.go"]

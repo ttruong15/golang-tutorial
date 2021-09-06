@@ -3,7 +3,7 @@ version: '3.5'
 services:
 
   developer-golang:
-    image: ttruong15/protobuf-grpc-tutorial:1.0.5
+    image: ttruong15/protobuf-grpc-tutorial:1.0.6
     ports:
       - 50051:50051
       - 8888:8888
@@ -11,10 +11,11 @@ services:
       - development
     links:
       - developer-database:devdb
-    #volumes:
-        #- /home/tinh/docker-env/examples/golang:/golang/examples
+    volumes:
+        - ~/golang/example.com:/golang/example.com
         #- /home/tinh/docker-env/examples/php:/php/code
         #- /home/tinh/docker-env/examples/node:/node
+        - ~/cassandra:/var/lib/cassandra
     environment:
       MODE: master
     restart: unless-stopped
