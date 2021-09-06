@@ -1,2 +1,2 @@
 #!/bin/bash
-docker build -t ttruong15/protobuf-grpc-tutorial:1.0.6 .
+docker build -t ttruong15/protobuf-grpc-tutorial:1.0.7 .
